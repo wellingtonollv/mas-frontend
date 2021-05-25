@@ -1,10 +1,14 @@
 import React from 'react';
+import GlobalStyle from './styles/global';
+import {BrowserRouter} from 'react-router-dom';
+import Routes from './routes/index'
 
 function App() {
   return (
-    <div className="App">
-      <h1> Frontend My Activies Space </h1>
-    </div>
+    <BrowserRouter>
+      <Routes/>
+      <GlobalStyle/> 
+    </BrowserRouter>
   );
 }
 
