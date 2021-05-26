@@ -1,13 +1,12 @@
-import {Container} from './styles'
-import {ButtonHTMLAttributes} from 'react'
+import { ButtonHTMLAttributes } from "react"
+import { Container } from "./styles"
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
-}
-export function Button({children, ...rest}:ButtonProps){
-    return(
-        <Container type="button" {...rest}>
-            {children}
-        </Container>
-    )
+export function Button({ children, ...rest }: ButtonProps) {
+	return (
+		<Container type="button" {...rest}>
+			{children}
+		</Container>
+	)
 }
