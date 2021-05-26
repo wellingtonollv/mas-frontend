@@ -26,6 +26,7 @@ export function Login() {
 					</form>
 					<Link to="/register">
 						<FontAwesomeIcon icon={faSignInAlt} />
+						Registrar-se
 					</Link>
 				</FormContainer>
 			</Content>
