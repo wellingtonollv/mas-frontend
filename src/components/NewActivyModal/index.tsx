@@ -3,6 +3,7 @@ import { Container, Error } from './styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import {useForm} from 'react-hook-form'
+import api from '../../services/api';
 
 interface NewActivyModalProps {
     isOpen: boolean;
@@ -18,7 +19,7 @@ interface NewActivyModalData {
 export function NewActivyModal({isOpen, onRequestClose}:NewActivyModalProps){
 
     const {register, handleSubmit, formState: {errors}} =useForm<NewActivyModalData>()
-    const onSubmit = handleSubmit(data => alert(JSON.stringify(data)))
+    const onSubmit = handleSubmit(data => api.post('/activy', data).then(response => alert(response.data)))
 
     return(
         <Modal

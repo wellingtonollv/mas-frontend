@@ -3,21 +3,22 @@ import {useForm} from 'react-hook-form';
 import {Container, Error} from './styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import api from '../../services/api'
 
-interface NewCourseUniteProps {
+interface NewCourseUnitProps {
     isOpen: boolean;
     onRequestClose: () => void;
 }
 
-interface NewCourseUnitedData {
+interface NewCourseUnitdData {
     name: string;
     description: string;
 }
 
-export function NewCourseUnite({isOpen, onRequestClose}:NewCourseUniteProps){
+export function NewCourseUnitModal({isOpen, onRequestClose}:NewCourseUnitProps){
 
-    const {register, handleSubmit, formState:{errors}} = useForm<NewCourseUnitedData>();
-    const onSubmit = handleSubmit(data=>alert(JSON.stringify(data)))
+    const {register, handleSubmit, formState:{errors}} = useForm<NewCourseUnitdData>();
+    const onSubmit = handleSubmit(data => api.post('/courseunit', data).then(response => alert(response.data)));
 
     return(
         <Modal
@@ -48,6 +49,9 @@ export function NewCourseUnite({isOpen, onRequestClose}:NewCourseUniteProps){
                         {...register("description",{required:true})}
                     />
                     {errors.description && <Error>O preenchimento do campo é obrigatório</Error>}
+                    <button type="submit">
+                        Cadastrar
+                    </button>
                </form>
            </Container>
         </Modal>

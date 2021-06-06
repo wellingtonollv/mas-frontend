@@ -4,6 +4,7 @@ import { faEnvelopeSquare, faSignInAlt, faLock } from "@fortawesome/free-solid-s
 import { Button } from "../../components/Button"
 import { Link } from "react-router-dom"
 import { useForm } from 'react-hook-form';
+import api from "../../services/api"
 
 
 interface FormData {
@@ -14,7 +15,7 @@ export function Login() {
 
 	const { register, handleSubmit, formState: {errors} } = useForm<FormData>();
 
-    const onSubmit = handleSubmit(data => alert(JSON.stringify(data)))
+    const onSubmit = handleSubmit(data => api.post('/auth', data).then(response => alert(response.data)));
 
 
 
