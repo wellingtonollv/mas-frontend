@@ -1,18 +1,20 @@
 import React from 'react';
-import {Switch, Route} from 'react-router-dom';
-import { Login } from '../pages/Login';
-import {Dashboard} from '../pages/Dashboard';
-import {Register} from '../pages/Register';
-import { NotFound } from '../pages/NotFound';
+import { Switch } from 'react-router-dom';
 
-const Routes: React.FC = () =>{
-    return <Switch>
-        <Route path="/" exact render={()=><Login/>}/>
-        <Route path="/dashboard" exact render={()=><Dashboard/>}/>
-        <Route path="/register" exact render={()=><Register/>}/>
-        <Route path="/*" render={()=><NotFound/>}/>
-        <Route />
-    </Switch>;
-}
+import Route from './Route';
+
+import {Login} from '../pages/Login';
+import {Register} from '../pages/Register';
+import {Dashboard} from '../pages/Dashboard';
+import {NotFound} from '../pages/NotFound';
+
+const Routes: React.FC = () => (
+  <Switch>
+    <Route path="/" exact component={Login} />
+    <Route path="/register" component={Register}/>
+    <Route path="/dashboard" component={Dashboard} isPrivate/>
+    <Route path="/*" component={NotFound}/>
+  </Switch>
+);  
 
 export default Routes;

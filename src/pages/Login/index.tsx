@@ -1,23 +1,34 @@
-import { Background, Content, Container, FormContainer, InputContainer, Error } from "./styles"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEnvelopeSquare, faSignInAlt, faLock } from "@fortawesome/free-solid-svg-icons"
+import { Container, Content, FormContainer, InputContainer, Error, Background } from "./styles"
+import { Link, useHistory } from "react-router-dom"
+import { useForm } from "react-hook-form"
 import { Button } from "../../components/Button"
-import { Link } from "react-router-dom"
-import { useForm } from 'react-hook-form';
-import api from "../../services/api"
-
+import { useAuth } from "../../hooks/Auth"
 
 interface FormData {
-    email: string;
-    password: string;
+	email: string
+	password: string
 }
+
 export function Login() {
+	const { signIn } = useAuth()
 
-	const { register, handleSubmit, formState: {errors} } = useForm<FormData>();
+	const history = useHistory()
 
-    const onSubmit = handleSubmit(data => api.post('/auth', data).then(response => alert(response.data)));
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<FormData>()
 
-
+	const onSubmit = handleSubmit(
+		async (data) =>
+			await signIn({
+				email: data.email,
+				password: data.password,
+			}).then(() => history.push("/dashboard"))
+	)
 
 	return (
 		<Container>
@@ -27,27 +38,19 @@ export function Login() {
 					<form onSubmit={onSubmit}>
 						<InputContainer>
 							<FontAwesomeIcon icon={faEnvelopeSquare} />
-							<input type="email" placeholder="E-mail" 
-								{...register("email", {required: true})}
-							/>
+							<input placeholder="E-mail" {...register("email", { required: true })} type="email" />
 						</InputContainer>
-
-						{errors.email && <Error>O preenchimento do campo é obrigatório</Error>}
-
+						{errors.email && <Error>O prenchimento do campo é obrigatório</Error>}
 						<InputContainer>
 							<FontAwesomeIcon icon={faLock} />
-							<input
-								type="password"
-								placeholder="Senha"
-								{...register("password", {required:true})}
-							/>
+							<input placeholder="Senha" {...register("password", { required: true })} type="password" />
 						</InputContainer>
-						{errors.password && <Error>O preenchimento do campo é obrigatório</Error>}
+						{errors.password && <Error>O prenchimento do campo é obrigatório</Error>}
 						<Button type="submit">Entrar</Button>
 					</form>
 					<Link to="/register">
-						<FontAwesomeIcon icon={faSignInAlt} />
-						Registrar-se
+					<FontAwesomeIcon icon={faSignInAlt} />
+						Cadastre sua conta
 					</Link>
 				</FormContainer>
 			</Content>

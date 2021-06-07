@@ -1,8 +1,9 @@
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { Container, Error } from './styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import {useForm} from 'react-hook-form'
+import { useForm } from 'react-hook-form'
+import { Container, Error } from './styles'
 import api from '../../services/api';
 
 interface NewActivyModalProps {
@@ -11,15 +12,32 @@ interface NewActivyModalProps {
 }
 
 interface NewActivyModalData {
-    courseunit: string;
-    activy: string;
-    date: Date;
+    courseUnitId: string;
+    name: string;
+    grade: number;
+    activity_date: Date
 }
 
-export function NewActivyModal({isOpen, onRequestClose}:NewActivyModalProps){
+interface CourseUnit {
+    id: string;
+    name: string;
+    description: string;
+}
 
-    const {register, handleSubmit, formState: {errors}} =useForm<NewActivyModalData>()
-    const onSubmit = handleSubmit(data => api.post('/activy', data).then(response => alert(response.data)))
+
+export function NewActivyModal({isOpen, onRequestClose}:NewActivyModalProps) {
+
+    const [courseUnits, setCourseUnits] = useState<CourseUnit[]>([]);
+
+    useEffect(() => {
+        api.get('/courseunit')
+            .then(response => setCourseUnits(response.data))
+    },[])
+
+    const { register, handleSubmit, formState: {errors} } = useForm<NewActivyModalData>();
+    
+    const onSubmit = handleSubmit(data => api.post('/activy', data)
+        .then(onRequestClose));
 
     return(
         <Modal
@@ -29,7 +47,7 @@ export function NewActivyModal({isOpen, onRequestClose}:NewActivyModalProps){
             className="react-modal-content"
         >
             <Container>
-                <h2>Cadastrar Atividades</h2>
+                <h2>Cadastrar Atividade</h2>
                 <button
                     type="button"
                     onClick={onRequestClose}
@@ -38,30 +56,40 @@ export function NewActivyModal({isOpen, onRequestClose}:NewActivyModalProps){
                     <FontAwesomeIcon icon={faTimesCircle}/>
                 </button>
                 <form onSubmit={onSubmit}>
+                    <select {...register("courseUnitId")}>
+                        <option selected value="">Selecione a Unidade Curricular</option>
+                        {courseUnits.map(courseUnit => {
+                            return (
+                                <option value={courseUnit.id}>{courseUnit.name}</option>
+                            )
+                        })}
+                    </select>
+                    {errors.courseUnitId && <Error>O prenchimento do campo é obrigatório</Error>}
                     <input 
                         type="text"
-                        placeholder="Unidade Curricular" 
-                        {...register("courseunit", {required: true})}
+                        placeholder="Atividade"
+                        {...register("name")}
                     />
-                    {errors.courseunit && <Error>O preenchimento do campo é obrigatório</Error>}
+                    {errors.name && <Error>O prenchimento do campo é obrigatório</Error>}
                     <input 
-                        type="text"
-                        placeholder="Atividade" 
-                        {...register("activy", {required: true})}
+                        type="number"
+                        step=".01"
+                        placeholder="Nota da avaliação"
+                        {...register("grade")}
                     />
-                    {errors.activy && <Error>O preenchimento do campo é obrigatório</Error>}
+                    {errors.grade && <Error>O prenchimento do campo é obrigatório</Error>}
                     <input 
                         type="date"
-                        placeholder="Data da Atividade" 
-                        {...register("date", {required: true})}
+                        placeholder="Data da atividade"
+                        {...register("activity_date")}
                     />
-                    {errors.date && <Error>O preenchimento do campo é obrigatório</Error>}
+                    {errors.activity_date && <Error>O prenchimento do campo é obrigatório</Error>}
                     <button type="submit">
                         Cadastrar
                     </button>
                 </form>
             </Container>
-
         </Modal>
+        
     )
 }

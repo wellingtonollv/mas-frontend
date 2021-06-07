@@ -1,51 +1,52 @@
 import { useState } from 'react';
-import { Container } from './styles';
-import { ActivyTable } from '../../components/ActivyTable'
-import { Header } from '../../components/Header';
+import { Header } from "../../components/Header";
+import { ActivyTable } from '../../components/ActivyTable';
 import { Summary } from '../../components/Summary';
 import {NewActivyModal} from '../../components/NewActivyModal';
 import {NewCourseUnitModal} from '../../components/NewCourseUnitModal';
 
-export function Dashboard(){
+import {Container} from './styles'
 
-    const[NewActivyOpen, setNewActivyOpen ]=useState(false);
-    const[NewCourseOpen, setNewCourseOpen ]=useState(false);
+export function Dashboard() {
+
+    const [isNewActivyModalOpen, setIsNewActivyModalOpen] = useState(false)
+    const [isNewCourseUnitModalOpen, setIsNewCourseUnitModalOpen] = useState(false)
+
 
     function handleOpenActivyModal(){
-        setNewActivyOpen(true);
+        setIsNewActivyModalOpen(true);
     }
 
     function handleCloseActivyModal(){
-        setNewActivyOpen(false);
+        setIsNewActivyModalOpen(false);
     }
 
-    function handleOpenCourseModal(){
-        setNewCourseOpen(true);
+    function handleOpenCourseUnitModal(){
+        setIsNewCourseUnitModalOpen(true);
     }
 
-    
-    function handleCloseCourseModal(){
-        setNewCourseOpen(false);
+    function handleCloseCourseUnitModal(){
+        setIsNewCourseUnitModalOpen(false);
     }
 
-    return(
+
+    return (
         <>
             <Header 
-                onOpenNewCourseUnit={handleOpenCourseModal}
-                onOpenActivyModal={handleOpenActivyModal}
+                onOpenNewActivyModal={handleOpenActivyModal} 
+                onOpenNewCourseUnitModal={handleOpenCourseUnitModal}
             />
             <Container>
                 <Summary />
                 <ActivyTable />
             </Container>
-
-            <NewActivyModal
-                isOpen={NewActivyOpen}
+            <NewActivyModal 
+                isOpen={isNewActivyModalOpen}
                 onRequestClose={handleCloseActivyModal}
             />
             <NewCourseUnitModal 
-                isOpen={NewCourseOpen}
-                onRequestClose={handleCloseCourseModal}
+                isOpen={isNewCourseUnitModalOpen}
+                onRequestClose={handleCloseCourseUnitModal}
             />
         </>
     )
